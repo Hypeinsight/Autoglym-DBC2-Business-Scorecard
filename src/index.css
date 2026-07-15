@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-paper text-ink font-sans min-h-screen;
+  }
+  h1, h2, h3 {
+    @apply font-display;
+    text-wrap: balance;
+  }
+  /* Figures line up in columns throughout this dashboard (period cells,
+     sparklines, deltas) — tabular-nums keeps digit widths consistent so
+     numbers don't visually jitter against each other. */
+  .figure {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Card load-in — a brief fade + rise so the grid feels like it's populating
+   live rather than just appearing. Delay is set per-card via --card-delay
+   (staggered by grid position, see ScorecardTab/ChannelDashboardTab). */
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.card-animate-in {
+  animation: card-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--card-delay, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-animate-in {
+    animation: none;
+  }
+}
+
+/* Never let the load-in animation affect the printed/exported page — a card
+   mid-fade at the moment scaleToFitA3() measures .print-page would be
+   captured at partial opacity or a shifted position. */
+@media print {
+  .card-animate-in {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Forces the dashboard's wide-screen 4-column layout regardless of the
+   browser window's actual width. Tailwind's `lg:grid-cols-4` only applies
+   above a 1024px VIEWPORT width — on a narrower window the grid silently
+   falls back to 2 columns. Applied (as a plain, non-@media-print rule) to
+   <body> by scaleToFitA3() in App.tsx BEFORE measuring .print-page's size,
+   so the measurement matches what will actually print — and left on during
+   printing itself so print doesn't re-flow back to 2 columns afterward. */
+.print-forced-layout .metric-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+/* A3 landscape print stylesheet — board pack export.
+   Only the Scorecard face prints; Commentary + Channel tabs are hidden.
+   scaleToFitA3() in App.tsx measures .print-page's natural (unscaled) size
+   right before window.print() and sets these custom properties.
+
+   Two-element shrink-to-fit: .print-page keeps its natural, un-clipped
+   width/height and is visually shrunk with a UNIFORM transform: scale() —
+   independent X/Y scaling was tried first but stretched/clipped card
+   content, so both axes now share one ratio and nothing gets distorted.
+   .print-page-outer is fixed at the full A3 printable box size and centers
+   .print-page within it via flexbox, so any leftover space from the
+   uniform scale (whichever axis wasn't the tighter constraint) is split
+   evenly as margin instead of piling up on one side. */
+@media print {
+  body {
+    background: #fff;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-page-outer {
+    margin: 0;
+    width: var(--print-page-outer-width, auto);
+    height: var(--print-page-outer-height, auto);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .print-page {
+    flex-shrink: 0;
+    box-shadow: none;
+    max-width: none;
+    width: var(--print-page-width, auto);
+    transform: scale(var(--print-scale, 1));
+  }
+  @page {
+    size: A3 landscape;
+    margin: 10mm;
+  }
+}

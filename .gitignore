@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+*.local
+
+# Env / secrets
+.env
+.env.local
+.env.*.local
+
+# Credentials — never commit service account keys or tokens
+server/credentials/*.json
+server/credentials/*.p12
+server/credentials/*.pem
+
+# SQLite database — runtime data, not source
+server/data/*.db
+server/data/*.db-shm
+server/data/*.db-wal
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

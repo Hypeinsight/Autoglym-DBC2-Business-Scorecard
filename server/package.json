@@ -1,0 +1,36 @@
+{
+  "name": "autoglym-dbc2-scorecard-server",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Autoglym DBC2 Scorecard — Node.js data API (GA4 / Google Ads / Klaviyo)",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "backfill": "tsx src/db/backfill.ts"
+  },
+  "dependencies": {
+    "@google-analytics/data": "^6.1.0",
+    "better-sqlite3": "^12.11.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "google-ads-api": "^24.1.0",
+    "googleapis": "^173.0.0",
+    "node-cron": "^4.6.0",
+    "node-fetch": "^3.3.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.1",
+    "@types/node-cron": "^3.0.11",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}
