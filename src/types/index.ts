@@ -10,11 +10,11 @@ export interface PeriodCell {
   value: string
   delta: string
   deltaDirection: TrendDirection
-  /** If set, this cell's value is typed in directly — rendered as an editable box saving to this key. */
+  /** If set, this cell's value is typed in directly - rendered as an editable box saving to this key. */
   manualMetricKey?: string
 }
 
-/** One sparkline bar — normalized height for rendering, plus the raw value and
+/** One sparkline bar - normalized height for rendering, plus the raw value and
  *  pre-formatted display string so a hover tooltip can show real data
  *  ("Mar 2026: 2.2M impr.") instead of just an unlabeled shape. */
 export interface SparklinePoint {
@@ -31,27 +31,27 @@ export interface Metric {
   unit?: string
   trend: TrendDirection
   trendLabel: string
-  /** The "vs X" comparison phrase alone (e.g. "vs prior period", "vs May 2026") — reused when the period selector swaps in a different period's delta. */
+  /** The "vs X" comparison phrase alone (e.g. "vs prior period", "vs May 2026") - reused when the period selector swaps in a different period's delta. */
   trendVsLabel: string
-  /** 12-point sparkline (oldest → newest) — MetricCard slices this to the trailing 3/6/12 months per the Period View selector. */
+  /** 12-point sparkline (oldest → newest) - MetricCard slices this to the trailing 3/6/12 months per the Period View selector. */
   sparkline: SparklinePoint[]
   periods: PeriodCell[]
   /** Pending = awaiting reliable data extraction (rendered muted). */
   pending?: boolean
-  /** True if `periods` are NOT a simple 3M/6M/12M progression (e.g. custom labels like "List Size") — headline stays pinned to `primary`/`trend` regardless of the period selector. */
+  /** True if `periods` are NOT a simple 3M/6M/12M progression (e.g. custom labels like "List Size") - headline stays pinned to `primary`/`trend` regardless of the period selector. */
   customPeriods?: boolean
   /**
    * For cards that show 3 DIFFERENT sub-metrics (not a 3M/6M/12M progression
-   * of the same metric) — one full 3-cell `periods` row per period view
+   * of the same metric) - one full 3-cell `periods` row per period view
    * ([3M row, 6M row, 12M row]), each row containing that period's own
    * sub-metric breakdown (e.g. Opens/Open Rate/CTR). When present, the
    * period selector swaps the ENTIRE `periods` array to periodsByView[index]
    * instead of picking a single cell.
    */
   periodsByView?: [PeriodCell[], PeriodCell[], PeriodCell[]]
-  /** Which cell within each periodsByView row is the headline (matches `unit`/`primary`'s meaning) — defaults to 0 if periodsByView is set but this isn't. */
+  /** Which cell within each periodsByView row is the headline (matches `unit`/`primary`'s meaning) - defaults to 0 if periodsByView is set but this isn't. */
   headlineIndex?: number
-  /** True if this card's value is typed in directly (no API source) — renders an editable input instead of static text. */
+  /** True if this card's value is typed in directly (no API source) - renders an editable input instead of static text. */
   manualInput?: boolean
   /** The key to POST to /api/manual-metrics when manualInput is true. */
   manualMetricKey?: string
@@ -69,7 +69,7 @@ export interface ScorecardSection {
 
 /** Commentary item: Highlight / Lowlight / Optimisation Opportunity. */
 export interface CommentaryItem {
-  /** Stable key this item saves under (e.g. "media-highlight") — used as the manual-edit save key, independent of display order. */
+  /** Stable key this item saves under (e.g. "media-highlight") - used as the manual-edit save key, independent of display order. */
   id: string
   kind: 'highlight' | 'lowlight' | 'opportunity'
   text: string
@@ -90,7 +90,7 @@ export interface CampaignBullet {
 export interface Campaign {
   id: string
   name: string
-  /** How many months before the selected "As At" month this campaign started — the display label ("Mar 2026 – ongoing") is computed from this, so it always tracks the current month instead of going stale. */
+  /** How many months before the selected "As At" month this campaign started - the display label ("Mar 2026 – ongoing") is computed from this, so it always tracks the current month instead of going stale. */
   startedMonthsAgo: number
   bullets: CampaignBullet[]
 }

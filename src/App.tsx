@@ -31,7 +31,7 @@ function generateAsAtOptions(count: number): { label: string; value: string }[] 
 
 const AS_AT_OPTIONS = generateAsAtOptions(12)
 
-/** Autoglym logo in the app header — hides itself if the file isn't present (falls back to the text wordmark next to it). */
+/** Autoglym logo in the app header - hides itself if the file isn't present (falls back to the text wordmark next to it). */
 function AutoglymLogo() {
   const [failed, setFailed] = useState(false)
   if (failed) return null
@@ -45,12 +45,12 @@ const A3_PRINTABLE_HEIGHT_PX = (297 - 20) * MM_TO_PX
 const A3_PRINTABLE_WIDTH_PX = (420 - 20) * MM_TO_PX
 
 /** Measures the rendered scorecard and shrinks it (via CSS vars read by
- *  index.css) to fit on one A3 page, however it actually renders — avoids
+ *  index.css) to fit on one A3 page, however it actually renders - avoids
  *  hardcoding a scale that only works for one browser/font combination.
  *  Runs synchronously right before window.print().
  *
  *  Scale is UNIFORM (one ratio for both axes) so nothing gets distorted or
- *  clipped — an earlier independent X/Y version stretched cards past the
+ *  clipped - an earlier independent X/Y version stretched cards past the
  *  printable width and cut off their right edges. Whichever axis has the
  *  looser fit is centered within the page rather than left/top-aligned, so
  *  the leftover space (if any) is evenly split as margin instead of being
@@ -72,7 +72,7 @@ function scaleToFitA3() {
   root.removeProperty('--print-page-outer-height')
   // Force the wide-screen 4-column grid BEFORE measuring, so a narrow
   // browser window doesn't get measured at its (possibly 2-column) on-screen
-  // layout and then print that instead — see .print-forced-layout in index.css.
+  // layout and then print that instead - see .print-forced-layout in index.css.
   document.body.classList.add('print-forced-layout')
   const { width, height } = page.getBoundingClientRect()
   const scale = Math.min(A3_PRINTABLE_WIDTH_PX / width, A3_PRINTABLE_HEIGHT_PX / height, 1)
@@ -102,12 +102,12 @@ function toSections(resp: ScorecardResponse, sectionIds: Set<string> | null): Sc
     }))
 }
 
-/** BSC scorecard face — only Media Volume & Engagement, per brief. */
+/** BSC scorecard face - only Media Volume & Engagement, per brief. */
 function toScorecardSections(resp: ScorecardResponse): ScorecardSection[] {
   return toSections(resp, SCORECARD_FACE_SECTION_IDS)
 }
 
-/** Everything NOT on the scorecard face — channel-level drill-down detail. */
+/** Everything NOT on the scorecard face - channel-level drill-down detail. */
 function toChannelSections(resp: ScorecardResponse): ScorecardSection[] {
   const channelIds = new Set(resp.sections.map((s) => s.id).filter((id) => !SCORECARD_FACE_SECTION_IDS.has(id)))
   return toSections(resp, channelIds)
@@ -145,7 +145,7 @@ export default function App() {
     }
   }, [])
 
-  // Re-fetches without dropping to the loading screen — used after a manual
+  // Re-fetches without dropping to the loading screen - used after a manual
   // metric edit, where only that one card's numbers changed and the rest of
   // the page shouldn't flicker/unmount.
   const refresh = useCallback(async (month: string) => {
@@ -263,7 +263,7 @@ export default function App() {
         </div>
       )}
 
-      {/* PANELS — only render once data is available */}
+      {/* PANELS - only render once data is available */}
       {loadState !== 'loading' && loadState !== 'error' && (
         <>
           {tab === 'scorecard' && (
@@ -291,7 +291,7 @@ export default function App() {
         </>
       )}
 
-      {/* API STATUS BADGE — reflects the real per-source mix from the API (dataSourceStatus), not just "always live" */}
+      {/* API STATUS BADGE - reflects the real per-source mix from the API (dataSourceStatus), not just "always live" */}
       <div
         className={`no-print fixed bottom-6 right-6 z-[200] rounded-full px-3.5 py-1.5 font-display text-[0.7rem] font-bold uppercase tracking-[0.05em] text-white shadow-badge ${
           loadState === 'live' ? 'bg-up' : loadState === 'error' ? 'bg-down' : 'bg-neutral'

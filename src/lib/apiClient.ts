@@ -1,5 +1,5 @@
 /**
- * Frontend API client — calls the Node.js backend at /api.
+ * Frontend API client - calls the Node.js backend at /api.
  * Vite proxies /api → http://localhost:3001 in dev (see vite.config.ts).
  * In production, set VITE_API_BASE_URL to the deployed server URL.
  */
@@ -60,7 +60,7 @@ export async function saveManualMetric(month: string, metricKey: string, value: 
   await apiPost('/manual-metrics', { month, metricKey, value })
 }
 
-/** Fetch this month's saved commentary edits (field key -> text), if any — falls back to seeded sample text for anything not overridden. */
+/** Fetch this month's saved commentary edits (field key -> text), if any - falls back to seeded sample text for anything not overridden. */
 export async function fetchCommentaryEdits(month: string): Promise<Record<string, string>> {
   const { edits } = await apiFetch<{ month: string; edits: Record<string, string> }>('/commentary', { month })
   return edits

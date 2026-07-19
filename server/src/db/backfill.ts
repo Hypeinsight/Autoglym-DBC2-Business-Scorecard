@@ -1,5 +1,5 @@
 /**
- * One-off backfill script — pulls historical data for each configured API
+ * One-off backfill script - pulls historical data for each configured API
  * and populates the daily_metrics table, so rolling 3M/6M/12M windows have
  * real history immediately instead of waiting ~12 months for the daily
  * scheduler to accumulate it naturally.
@@ -8,7 +8,7 @@
  * Defaults to the last 365 days ending yesterday.
  *
  * Each source is fetched with ONE API call covering the whole range
- * (day-segmented server-side), not one call per day — keeps this well
+ * (day-segmented server-side), not one call per day - keeps this well
  * within rate limits regardless of how many days are being backfilled.
  */
 import 'dotenv/config'
@@ -68,7 +68,7 @@ async function backfillGA4(from: string, to: string): Promise<number> {
       engagementRate: m.engagementRate,
     })
   }
-  console.log(`[backfill] GA4 — ${Object.keys(byDay).length} days written`)
+  console.log(`[backfill] GA4 - ${Object.keys(byDay).length} days written`)
   return Object.keys(byDay).length
 }
 
@@ -96,7 +96,7 @@ async function backfillGoogleAds(from: string, to: string): Promise<number> {
       cpa: m.cpa,
     })
   }
-  console.log(`[backfill] Google Ads — ${Object.keys(byDay).length} days written`)
+  console.log(`[backfill] Google Ads - ${Object.keys(byDay).length} days written`)
   return Object.keys(byDay).length
 }
 
@@ -120,7 +120,7 @@ async function backfillMeta(from: string, to: string): Promise<number> {
       conversions: m.conversions,
     })
   }
-  console.log(`[backfill] Meta — ${Object.keys(byDay).length} days written`)
+  console.log(`[backfill] Meta - ${Object.keys(byDay).length} days written`)
   return Object.keys(byDay).length
 }
 
@@ -143,13 +143,13 @@ async function backfillKlaviyo(from: string, to: string): Promise<number> {
       listGrowth: m.listGrowth,
     })
   }
-  console.log(`[backfill] Klaviyo — ${Object.keys(byDay).length} days written (only days with sends)`)
+  console.log(`[backfill] Klaviyo - ${Object.keys(byDay).length} days written (only days with sends)`)
   return Object.keys(byDay).length
 }
 
 async function main(): Promise<void> {
   const { from, to } = parseArgs()
-  console.log(`[backfill] Backfilling ${from} → ${to} — one API call per source, not per day`)
+  console.log(`[backfill] Backfilling ${from} → ${to} - one API call per source, not per day`)
 
   const sources: Array<[string, () => Promise<number>]> = [
     ['GA4', () => backfillGA4(from, to)],
@@ -163,7 +163,7 @@ async function main(): Promise<void> {
       await job()
     } catch (err) {
       const reason = err instanceof Error ? err.message : String(err)
-      console.error(`[backfill] ${label} failed — ${reason}`)
+      console.error(`[backfill] ${label} failed - ${reason}`)
     }
   }
 

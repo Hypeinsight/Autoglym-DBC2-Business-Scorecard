@@ -2,7 +2,7 @@
   "name": "autoglym-dbc2-scorecard-server",
   "private": true,
   "version": "0.1.0",
-  "description": "Autoglym DBC2 Scorecard — Node.js data API (GA4 / Google Ads / Klaviyo)",
+  "description": "Autoglym DBC2 Scorecard - Node.js data API (GA4 / Google Ads / Klaviyo)",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {

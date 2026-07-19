@@ -1,9 +1,9 @@
-# Autoglym DBC2 — Business Scorecard Dashboard
+# Autoglym DBC2 - Business Scorecard Dashboard
 
 A custom Business Scorecard Dashboard for Autoglym's DBC2 division: a single, print-ready
 A3 view that aggregates key marketing performance metrics for board-ready reporting.
 
-Built by **Hype Insight**. Stack: **React + TypeScript + Vite + TailwindCSS + Chart.js**.
+Stack: **React + TypeScript + Vite + TailwindCSS + Chart.js**.
 
 ---
 
@@ -18,10 +18,10 @@ This repo is staged in two layers:
 
 The four delivery phases (per the proposal):
 
-1. **Discovery & Wireframing** — ✅ wireframe done, migrated to React.
-2. **Backend Architecture & Data Integration** — Node.js data pipeline, GA4 / Google Ads / Iconosquare APIs, GTM retailer click tracking. _(not started)_
-3. **Frontend Development & Commentary System** — Chart.js visuals, commentary portal. _(scaffolded; sample data)_
-4. **Testing, Deployment & Handover** — QA, A3 print optimisation, cloud deploy. _(not started)_
+1. **Discovery & Wireframing** - ✅ wireframe done, migrated to React.
+2. **Backend Architecture & Data Integration** - Node.js data pipeline, GA4 / Google Ads / Iconosquare APIs, GTM retailer click tracking. _(not started)_
+3. **Frontend Development & Commentary System** - Chart.js visuals, commentary portal. _(scaffolded; sample data)_
+4. **Testing, Deployment & Handover** - QA, A3 print optimisation, cloud deploy. _(not started)_
 
 ---
 
@@ -51,9 +51,9 @@ npm run typecheck  # tsc --noEmit
 ├── public/                     # static assets served as-is
 ├── src/
 │   ├── components/
-│   │   ├── scorecard/          # Tab 1 — Balanced Scorecard face (prints to A3)
-│   │   ├── commentary/         # Tab 2 — monthly commentary layer
-│   │   ├── dashboard/          # Tab 3 — channel drill-down + retailer breakdown
+│   │   ├── scorecard/          # Tab 1 - Balanced Scorecard face (prints to A3)
+│   │   ├── commentary/         # Tab 2 - monthly commentary layer
+│   │   ├── dashboard/          # Tab 3 - channel drill-down + retailer breakdown
 │   │   └── shared/             # Sparkline, SectionLabel, etc.
 │   ├── data/                   # sample data (replaced by API layer in Phase 2)
 │   ├── types/                  # shared domain types
@@ -67,12 +67,12 @@ npm run typecheck  # tsc --noEmit
 
 ## The three tabs
 
-- **Scorecard** — the BSC face. Two sections (Media Volume & Performance, Engagement &
+- **Scorecard** - the BSC face. Two sections (Media Volume & Performance, Engagement &
   Lead Success), each a 4-up grid of metric cards with trend, sparkline, and 3M/6M/12M
   rolling comparisons. **This is the only tab that prints** (A3 landscape).
-- **Commentary** — a separate layer (Highlights / Lowlights / Optimisation Opportunities)
+- **Commentary** - a separate layer (Highlights / Lowlights / Optimisation Opportunities)
   plus campaign attribution. Not on the BSC face.
-- **Channel Dashboard** — retailer button-click breakdown and per-channel detail. Drill-down
+- **Channel Dashboard** - retailer button-click breakdown and per-channel detail. Drill-down
   reference only; retailer attribution deliberately lives here, not on the scorecard face.
 
 ## Notes

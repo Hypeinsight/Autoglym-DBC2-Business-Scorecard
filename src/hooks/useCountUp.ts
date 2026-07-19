@@ -4,11 +4,11 @@ import { useEffect, useRef, useState } from 'react'
  * Animates a pre-formatted display string (e.g. "2.2M", "$37.17", "52.8%")
  * by counting up its leading numeric portion from 0 while leaving any
  * prefix/suffix (currency symbol, unit letter, %) untouched. There's no raw
- * number available client-side — cards only ever receive the server's
- * already-formatted string — so this parses just enough to animate without
+ * number available client-side - cards only ever receive the server's
+ * already-formatted string - so this parses just enough to animate without
  * needing to know the metric's underlying format rules.
  *
- * Non-numeric strings (e.g. "—", "1:48" duration, "Healthy") pass through
+ * Non-numeric strings (e.g. "-", "1:48" duration, "Healthy") pass through
  * unanimated, since there's nothing sensible to count up from.
  */
 export function useCountUp(target: string, durationMs = 700): string {
@@ -40,7 +40,7 @@ export function useCountUp(target: string, durationMs = 700): string {
     function tick(now: number) {
       const elapsed = now - startTime
       const progress = Math.min(1, elapsed / durationMs)
-      // ease-out cubic — fast start, settles gently rather than a linear count
+      // ease-out cubic - fast start, settles gently rather than a linear count
       const eased = 1 - (1 - progress) ** 3
       const value = endValue * eased
       const formatted = value.toFixed(decimals)

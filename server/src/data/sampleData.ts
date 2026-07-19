@@ -97,7 +97,7 @@ const META_PRIOR = {
   conversions: 1656,
 }
 
-// Fixed per-month wobble factors (not random — sample data must render
+// Fixed per-month wobble factors (not random - sample data must render
 // identically on every request/page load, so Math.random() is off the
 // table). Deliberately NOT monotonic: a straight linear ramp from prior to
 // current draws as a dead-flat line on the sparkline, which reads as
@@ -108,7 +108,7 @@ const META_PRIOR = {
 const WOBBLE = [0, 0.05, -0.03, 0.07, -0.02, 0.09, -0.04, 0.06, -0.02, 0.08, 0.03, 0]
 
 // Builds a 12-point monthly series that moves from `prior` to `current`
-// with a realistic wobble instead of a straight ramp — see WOBBLE above.
+// with a realistic wobble instead of a straight ramp - see WOBBLE above.
 function monthlySeries<T extends Record<string, number>>(prior: T, current: T): T[] {
   const keys = Object.keys(prior) as (keyof T)[]
   return Array.from({ length: 12 }, (_, i) => {
@@ -120,7 +120,7 @@ function monthlySeries<T extends Record<string, number>>(prior: T, current: T): 
       // Wobble scales with the metric's own range, so a small-range metric
       // (e.g. a 0-1 rate) doesn't get an absurdly large swing relative to
       // its size, while a large-range metric (e.g. sessions) still shows a
-      // visually meaningful bump — and endpoints get zero wobble so
+      // visually meaningful bump - and endpoints get zero wobble so
       // month 0 / the last month stay exactly on the real values.
       const wobble = (Math.abs(span) || Math.abs(prior[key]) * 0.1) * WOBBLE[i]
       point[key] = (linear + wobble) as T[keyof T]
@@ -138,7 +138,7 @@ export const SAMPLE_PERIOD_DATA: Omit<PeriodData, 'reportingMonth' | 'sparklineM
   monthlyMeta: monthlySeries(META_PRIOR, META_CURRENT),
   monthlyEdm:  monthlySeries(EDM_PRIOR, EDM_CURRENT),
   // Sample data renders as if it were real so a demo doesn't show empty
-  // sparklines — every month is marked "has data" (true), unlike a genuine
+  // sparklines - every month is marked "has data" (true), unlike a genuine
   // live-API fallback where gaps should stay visibly empty.
   monthlyHasData: {
     ga4: Array(12).fill(true),
@@ -147,7 +147,7 @@ export const SAMPLE_PERIOD_DATA: Omit<PeriodData, 'reportingMonth' | 'sparklineM
     edm: Array(12).fill(true),
   },
   // Manual figures are always computed fresh from the real manual_metrics
-  // table in the route (not sampled) — this placeholder only exists to
+  // table in the route (not sampled) - this placeholder only exists to
   // satisfy the PeriodData shape for the parts of `sample` still referenced
   // per-source (e.g. sample.r3m.current) elsewhere in scorecard.ts.
   manual: {

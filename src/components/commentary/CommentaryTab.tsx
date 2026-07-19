@@ -9,7 +9,7 @@ const kindLabel: Record<CommentaryItem['kind'], { text: string; cls: string }> =
   opportunity: { text: 'Optimisation Opportunity', cls: 'text-neutral' },
 }
 
-/** "Mar 2026 – ongoing" — computed from the campaign's start offset and the
+/** "Mar 2026 – ongoing" - computed from the campaign's start offset and the
  *  currently selected As At month, so it always reflects the latest month
  *  instead of a hardcoded date going stale. */
 function campaignDateLabel(asAtMonth: string, startedMonthsAgo: number): string {
@@ -20,11 +20,11 @@ function campaignDateLabel(asAtMonth: string, startedMonthsAgo: number): string 
 }
 
 interface Props {
-  /** Currently selected "As At" month ('YYYY-MM') — edits save against this month. */
+  /** Currently selected "As At" month ('YYYY-MM') - edits save against this month. */
   asAtMonth: string
 }
 
-/** One click-to-edit text block — click to edit inline, blur/Enter to save, Escape to cancel. */
+/** One click-to-edit text block - click to edit inline, blur/Enter to save, Escape to cancel. */
 function EditableText({
   fieldKey,
   text,
@@ -96,7 +96,7 @@ function EditableText({
   )
 }
 
-/** Tab 2 — separate commentary layer. Not on the BSC face; not printed.
+/** Tab 2 - separate commentary layer. Not on the BSC face; not printed.
  *  Starting content is seeded sample text; any edit made here is saved per
  *  month and overrides the seed on future loads for that month. */
 export function CommentaryTab({ asAtMonth }: Props) {
@@ -119,7 +119,7 @@ export function CommentaryTab({ asAtMonth }: Props) {
 
   async function handleSave(fieldKey: string, value: string) {
     setSaveError('')
-    // Optimistic — update locally immediately, then persist.
+    // Optimistic - update locally immediately, then persist.
     setEdits((prev) => ({ ...prev, [fieldKey]: value }))
     try {
       await saveCommentaryText(asAtMonth, fieldKey, value)
@@ -133,7 +133,7 @@ export function CommentaryTab({ asAtMonth }: Props) {
   return (
     <div className="mx-auto my-6 max-w-page rounded-xl border border-line bg-card px-8 pb-8 pt-7 shadow-page">
       <div className="mb-6 border-b-2 border-ink pb-4">
-        <div className="font-display text-[1.3rem] font-extrabold text-ink">Monthly Commentary — {monthLabel}</div>
+        <div className="font-display text-[1.3rem] font-extrabold text-ink">Monthly Commentary - {monthLabel}</div>
         <div className="mt-1.5 text-[0.82rem] text-muted">
           Separate commentary layer
         </div>
@@ -169,7 +169,7 @@ export function CommentaryTab({ asAtMonth }: Props) {
 
       <div className="mb-5 rounded-lg border border-line bg-paper px-5 py-[18px] shadow-card">
         <div className="mb-3.5 border-b border-line pb-2 font-display text-[0.72rem] font-bold uppercase tracking-[0.09em] text-ink">
-          Campaign Attribution — Active This Period
+          Campaign Attribution - Active This Period
         </div>
         {campaigns.map((c) => (
           <div key={c.id} className="mb-3 rounded-lg border border-line bg-card px-5 py-4">

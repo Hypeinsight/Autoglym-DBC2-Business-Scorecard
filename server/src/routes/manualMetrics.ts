@@ -1,7 +1,7 @@
 /**
  * POST /api/manual-metrics
  *
- * Saves a manually-typed figure for one metric in one calendar month —
+ * Saves a manually-typed figure for one metric in one calendar month -
  * e.g. Press Office Impressions, which has no API source and is entered
  * directly on the scorecard card each month.
  */
@@ -12,10 +12,10 @@ import { AppError } from '../middleware/errorHandler.js'
 
 export const manualMetricsRouter = Router()
 
-/** Metric keys that are allowed to be set this way — avoids the endpoint being used to overwrite arbitrary data. */
+/** Metric keys that are allowed to be set this way - avoids the endpoint being used to overwrite arbitrary data. */
 const ALLOWED_METRIC_KEYS = new Set([
   'press_office_impressions',
-  // Period-box overrides — typed directly into the 3M/6M/12M cells,
+  // Period-box overrides - typed directly into the 3M/6M/12M cells,
   // independent of the monthly headline figure above them.
   'press_office_impressions_3m',
   'press_office_impressions_6m',

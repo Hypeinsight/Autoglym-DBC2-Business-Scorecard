@@ -1,7 +1,7 @@
 /**
  * Meta Marketing API client (Facebook / Instagram Ads).
  *
- * Uses the Graph API directly — no official Node SDK needed.
+ * Uses the Graph API directly - no official Node SDK needed.
  * Auth: long-lived System User token (never expires) or long-lived page token (60 days).
  *
  * Required permissions on the token: ads_read, read_insights
@@ -100,17 +100,17 @@ function parseInsightRow(row: RawInsightRow): Omit<MetaAccountMetricsRaw, 'spend
   const frequency = parseFloat(row.frequency ?? '0')
   const cpm = parseFloat(row.cpm ?? '0')
   const cpc = parseFloat(row.cpc ?? '0')
-  // Meta ctr is already a percentage string — convert to 0–1
+  // Meta ctr is already a percentage string - convert to 0–1
   const ctr = parseFloat(row.ctr ?? '0') / 100
 
-  // Link clicks — outbound clicks to the website (retailer buttons, landing pages, etc.)
+  // Link clicks - outbound clicks to the website (retailer buttons, landing pages, etc.)
   const actions = row.actions ?? []
   const linkClicks = parseInt(
     actions.find(a => a.action_type === 'link_click')?.value ?? '0',
     10,
   )
 
-  // Conversion action, in priority order — first one present in the response wins.
+  // Conversion action, in priority order - first one present in the response wins.
   // Must stay in sync with the cost_per_action_type lookup below so CPA is computed
   // against the SAME action, not a different one (e.g. conversions from fb_pixel_custom
   // priced using link_click cost, which understates CPA by orders of magnitude).
@@ -160,7 +160,7 @@ export async function fetchMetaAccountMetrics(
 
   const row = response.data?.[0]
   if (!row) {
-    // No spend in this period — return zeroed metrics rather than throwing
+    // No spend in this period - return zeroed metrics rather than throwing
     return {
       spend: 0, impressions: 0, reach: 0, frequency: 0,
       cpm: 0, cpc: 0, ctr: 0, cpa: 0, linkClicks: 0, conversions: 0,
@@ -171,7 +171,7 @@ export async function fetchMetaAccountMetrics(
 }
 
 /**
- * Fetch per-day account metrics across a date range in a single API call —
+ * Fetch per-day account metrics across a date range in a single API call -
  * used by the backfill script so history doesn't require one round-trip per day.
  * Uses Meta's time_increment=1 to get one insights row per day.
  *

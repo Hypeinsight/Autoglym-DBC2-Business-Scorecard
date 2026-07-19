@@ -8,7 +8,7 @@
  * the GA4, Google Ads, and Klaviyo API clients.
  *
  * Date arithmetic here is done on plain (year, month, day) integers, NOT via
- * JS `Date` objects — `new Date('YYYY-MM-DD')` parses as UTC midnight while
+ * JS `Date` objects - `new Date('YYYY-MM-DD')` parses as UTC midnight while
  * `new Date(y, m, d)` constructs in local time, and converting between them
  * with `toISOString()` silently shifts the date by a day in timezones behind
  * UTC. Working entirely in integers sidesteps that class of bug.
@@ -43,13 +43,13 @@ export function getRollingDateRanges(reportingMonth: string): {
 
 /**
  * Returns the "prior period" range used to calculate the delta shown on
- * each metric card — the SAME window shifted back 12 months (year-on-year),
+ * each metric card - the SAME window shifted back 12 months (year-on-year),
  * not the immediately preceding sequential period.
  *
  * e.g. current 3M = Mar–May 2026 → prior = Mar–May 2025, NOT Dec 2025–Feb 2026.
  * This mirrors the current period's exact start/end dates one year earlier,
  * so seasonal comparisons are apples-to-apples. This was called out
- * explicitly in the project brief as a hard requirement — a prior board
+ * explicitly in the project brief as a hard requirement - a prior board
  * pack submission used sequential quarter-on-quarter by mistake and was
  * flagged as an error.
  *

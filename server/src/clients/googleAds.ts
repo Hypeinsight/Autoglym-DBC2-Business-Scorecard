@@ -70,7 +70,7 @@ export async function fetchGoogleAdsMetrics(
     refresh_token: refreshToken,
   })
 
-  // No campaign.status filter — historical reporting needs spend from ALL
+  // No campaign.status filter - historical reporting needs spend from ALL
   // campaigns that ran in the period, including ones since paused or removed.
   // Filtering to ENABLED-only silently drops any campaign that isn't live
   // *today*, which understates spend for any month except the current one.
@@ -122,7 +122,7 @@ export async function fetchGoogleAdsMetrics(
 }
 
 /**
- * Fetch per-day metrics across a date range in a single API call — used by the
+ * Fetch per-day metrics across a date range in a single API call - used by the
  * backfill script so history doesn't require one round-trip per day.
  *
  * @returns map of 'YYYY-MM-DD' → that day's aggregated metrics across all campaigns
@@ -150,7 +150,7 @@ export async function fetchGoogleAdsMetricsByDay(
     refresh_token: refreshToken,
   })
 
-  // No campaign.status filter — see note in fetchGoogleAdsMetrics above.
+  // No campaign.status filter - see note in fetchGoogleAdsMetrics above.
   const rows = await customer.query(`
     SELECT
       segments.date,

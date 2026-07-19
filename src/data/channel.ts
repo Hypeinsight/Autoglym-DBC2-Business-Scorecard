@@ -1,6 +1,6 @@
 import type { RetailerClicks } from '@/types'
 
-/** Retailer button click breakdown — dashboard-layer only, NOT on the BSC face. */
+/** Retailer button click breakdown - dashboard-layer only, NOT on the BSC face. */
 export const retailerClicks: RetailerClicks[] = [
   { name: 'Super Cheap Auto', clicks: 5820, sharePct: 37.6, color: '#2563eb', logo: '/logos/supercheap-auto.webp' },
   { name: 'Repco', clicks: 4210, sharePct: 27.2, color: '#16a34a', logo: '/logos/repco.webp' },

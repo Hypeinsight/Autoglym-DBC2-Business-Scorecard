@@ -34,20 +34,20 @@ export interface PeriodData {
   /** Per-source, per-month: true if that month is real (DB/live) data, false if it's a sample fallback. */
   monthlyHasData: { ga4: boolean[]; ads: boolean[]; meta: boolean[]; edm: boolean[] }
   reportingMonth: string                 // 'YYYY-MM'
-  /** 9 month labels (e.g. "Oct 2025"), oldest → newest — same window as every monthly* array above, computed once by the route. */
+  /** 9 month labels (e.g. "Oct 2025"), oldest → newest - same window as every monthly* array above, computed once by the route. */
   sparklineMonths: string[]
   /** 'live' = every source is real DB/API data; 'sample' = every source fell back; 'mixed' = some of each (e.g. GA4 sample, everything else live). */
   dataSourceStatus: 'live' | 'mixed' | 'sample'
-  /** Manually-entered figures — read from the manual_metrics table by the route, formatted here. */
+  /** Manually-entered figures - read from the manual_metrics table by the route, formatted here. */
   manual: {
     /** 3M/6M/12M sums for Press Office Impressions, or null if nothing entered for a period. */
     pressOfficeImpressions: { r3m: number | null; r6m: number | null; r12m: number | null }
-    /** Last 9 months, oldest first — null where nothing was entered that month. */
+    /** Last 9 months, oldest first - null where nothing was entered that month. */
     monthlyPressOfficeImpressions: Array<number | null>
   }
 }
 
-/** AND two per-month hasData arrays together — a blended sparkline (e.g. Ads + Meta) is only "real" for a month where BOTH sources have real data. */
+/** AND two per-month hasData arrays together - a blended sparkline (e.g. Ads + Meta) is only "real" for a month where BOTH sources have real data. */
 function combineHasData(a: boolean[], b: boolean[]): boolean[] {
   return a.map((v, i) => v && (b[i] ?? false))
 }
@@ -71,31 +71,31 @@ export function buildScorecardResponse(data: PeriodData): ScorecardResponse {
         label: 'Engagement & Lead Success',
         metrics: buildEngagementMetrics(data),
       },
-      // Channel-level detail — NOT shown on the BSC scorecard face, only the
+      // Channel-level detail - NOT shown on the BSC scorecard face, only the
       // Channel Dashboard tab. Per brief: per-channel drill-down lives here.
       {
         id: 'channel-meta',
-        label: `Meta Ads — ${formatMonthLabel(data.reportingMonth)}`,
+        label: `Meta Ads · ${formatMonthLabel(data.reportingMonth)}`,
         metrics: buildMetaChannelMetrics(data),
       },
       {
         id: 'channel-google-ads',
-        label: `Google Ads — ${formatMonthLabel(data.reportingMonth)}`,
+        label: `Google Ads · ${formatMonthLabel(data.reportingMonth)}`,
         metrics: buildGoogleAdsChannelMetrics(data),
       },
       {
         id: 'channel-ga4',
-        label: `GA4 Website — ${formatMonthLabel(data.reportingMonth)}`,
+        label: `GA4 Website · ${formatMonthLabel(data.reportingMonth)}`,
         metrics: buildGA4ChannelMetrics(data),
       },
       {
         id: 'channel-klaviyo',
-        label: `Klaviyo EDM — ${formatMonthLabel(data.reportingMonth)}`,
+        label: `Klaviyo EDM · ${formatMonthLabel(data.reportingMonth)}`,
         metrics: buildKlaviyoChannelMetrics(data),
       },
       {
         id: 'channel-organic-social',
-        label: `Organic Social — ${formatMonthLabel(data.reportingMonth)}`,
+        label: `Organic Social · ${formatMonthLabel(data.reportingMonth)}`,
         metrics: buildOrganicSocialChannelMetrics(data),
       },
     ],
@@ -118,14 +118,14 @@ function buildMediaMetrics(data: PeriodData): ScorecardMetric[] {
   const adsMetaGa4HasData = combineHasData(adsMetaHasData, monthlyHasData.ga4)
 
   // ── Blended totals: Google Ads + Meta ───────────────────────────────────────
-  // Total impressions (paid) — Google Ads + Meta combined
+  // Total impressions (paid) - Google Ads + Meta combined
   const imp3  = r3m.ads.current.impressions  + r3m.meta.current.impressions
   const imp3p = r3m.ads.prior.impressions    + r3m.meta.prior.impressions
   const imp6  = r6m.ads.current.impressions  + r6m.meta.current.impressions
   const imp12 = r12m.ads.current.impressions + r12m.meta.current.impressions
   const impDelta = pctDelta(imp3, imp3p)
 
-  // Total link clicks (all paid) — Google Ads clicks + Meta link clicks
+  // Total link clicks (all paid) - Google Ads clicks + Meta link clicks
   const clk3  = r3m.ads.current.clicks  + r3m.meta.current.linkClicks
   const clk3p = r3m.ads.prior.clicks    + r3m.meta.prior.linkClicks
   const clk6  = r6m.ads.current.clicks  + r6m.meta.current.linkClicks
@@ -148,14 +148,14 @@ function buildMediaMetrics(data: PeriodData): ScorecardMetric[] {
   const cpc12 = (r12m.ads.current.spend + r12m.meta.current.spend) / ((r12m.ads.current.clicks + r12m.meta.current.linkClicks) || 1)
   const cpcDelta = currencyDelta(cpc3, cpc3p, true)
 
-  // Weighted average CTR (blended — impression-weighted)
+  // Weighted average CTR (blended - impression-weighted)
   const ctr3  = imp3  > 0 ? clk3  / imp3  : 0
   const ctr3p = imp3p > 0 ? clk3p / imp3p : 0
   const ctr6  = imp6  > 0 ? (r6m.ads.current.clicks + r6m.meta.current.linkClicks)   / imp6  : 0
   const ctr12 = imp12 > 0 ? (r12m.ads.current.clicks + r12m.meta.current.linkClicks) / imp12 : 0
   const ctrDelta = ppDelta(ctr3, ctr3p, false)
 
-  // Conversions (retailer clicks via paid — from GA4 GTM events)
+  // Conversions (retailer clicks via paid - from GA4 GTM events)
   const conv3  = r3m.current.retailerButtonClicks
   const conv3p = r3m.prior.retailerButtonClicks
   const conv6  = r6m.current.retailerButtonClicks
@@ -255,16 +255,16 @@ function buildMediaMetrics(data: PeriodData): ScorecardMetric[] {
     {
       id: 'press',
       name: 'Press Office Impressions (Manual)',
-      primary: data.manual.monthlyPressOfficeImpressions.at(-1) != null ? fmtNumber(data.manual.monthlyPressOfficeImpressions.at(-1)!) : '—',
+      primary: data.manual.monthlyPressOfficeImpressions.at(-1) != null ? fmtNumber(data.manual.monthlyPressOfficeImpressions.at(-1)!) : '-',
       unit: 'placements',
       trend: 'neutral',
       trendLabel: '',
       trendVsLabel: '',
       sparkline: toSparkline(data.manual.monthlyPressOfficeImpressions.map((v) => v ?? 0), data.manual.monthlyPressOfficeImpressions.map((v) => v !== null), fmtNumber),
       periods: [
-        { label: '3M', value: data.manual.pressOfficeImpressions.r3m !== null ? fmtNumber(data.manual.pressOfficeImpressions.r3m) : '—', delta: '—', deltaDirection: 'neutral', manualMetricKey: 'press_office_impressions_3m' },
-        { label: '6M', value: data.manual.pressOfficeImpressions.r6m !== null ? fmtNumber(data.manual.pressOfficeImpressions.r6m) : '—', delta: '—', deltaDirection: 'neutral', manualMetricKey: 'press_office_impressions_6m' },
-        { label: '12M', value: data.manual.pressOfficeImpressions.r12m !== null ? fmtNumber(data.manual.pressOfficeImpressions.r12m) : '—', delta: '—', deltaDirection: 'neutral', manualMetricKey: 'press_office_impressions_12m' },
+        { label: '3M', value: data.manual.pressOfficeImpressions.r3m !== null ? fmtNumber(data.manual.pressOfficeImpressions.r3m) : '-', delta: '-', deltaDirection: 'neutral', manualMetricKey: 'press_office_impressions_3m' },
+        { label: '6M', value: data.manual.pressOfficeImpressions.r6m !== null ? fmtNumber(data.manual.pressOfficeImpressions.r6m) : '-', delta: '-', deltaDirection: 'neutral', manualMetricKey: 'press_office_impressions_6m' },
+        { label: '12M', value: data.manual.pressOfficeImpressions.r12m !== null ? fmtNumber(data.manual.pressOfficeImpressions.r12m) : '-', delta: '-', deltaDirection: 'neutral', manualMetricKey: 'press_office_impressions_12m' },
       ],
       source: 'Manual input',
       lastUpdated: NOW,
@@ -281,7 +281,7 @@ function buildMetaChannelMetrics(data: PeriodData): ScorecardMetric[] {
   const { r3m, r6m, r12m, monthlyMeta, monthlyHasData, reportingMonth } = data
 
   // The reporting month is the last COMPLETED month (see lastNCalendarMonths /
-  // getRollingDateRanges — the 3M window's end date is the reporting month).
+  // getRollingDateRanges - the 3M window's end date is the reporting month).
   // "Previous month" for the vs-prior-month label is the one before that.
   const priorYearLabel = 'prior year'
 
@@ -321,8 +321,8 @@ function buildMetaChannelMetrics(data: PeriodData): ScorecardMetric[] {
     metric('meta-freq', 'Meta Frequency', freq3.toFixed(1), 'avg', freqDelta > 0 ? 'down' : freqDelta < 0 ? 'up' : 'neutral', `${freqDelta >= 0 ? '+' : ''}${freqDelta.toFixed(1)} vs ${priorYearLabel}`,
       freqSpark, [
         periodCell('3M', freq3.toFixed(1), { delta: freq3 > 3 ? 'High' : freq3 > 2.5 ? 'Watch' : 'Healthy', direction: freq3 > 3 ? 'down' : freq3 > 2.5 ? 'neutral' : 'up' }),
-        periodCell('6M', r6m.meta.current.frequency.toFixed(1), { delta: '—', direction: 'neutral' }),
-        periodCell('12M', r12m.meta.current.frequency.toFixed(1), { delta: '—', direction: 'neutral' }),
+        periodCell('6M', r6m.meta.current.frequency.toFixed(1), { delta: '-', direction: 'neutral' }),
+        periodCell('12M', r12m.meta.current.frequency.toFixed(1), { delta: '-', direction: 'neutral' }),
       ], 'Meta Ads', undefined),
 
     metric('meta-cpa', 'Meta CPA', fmtCurrency(cpa3), 'AUD', currencyDelta(cpa3, cpa3p, true).direction, `${currencyDelta(cpa3, cpa3p, true).delta} vs ${priorYearLabel}`,
@@ -496,9 +496,9 @@ function buildKlaviyoChannelMetrics(data: PeriodData): ScorecardMetric[] {
       trendVsLabel: 'Current list size (point-in-time)',
       sparkline: listSizeSpark,
       periods: [
-        periodCell('3M', fmtNumber(r3m.edm.current.listSize), { delta: '—', direction: 'neutral' }),
-        periodCell('6M', fmtNumber(r6m.edm.current.listSize), { delta: '—', direction: 'neutral' }),
-        periodCell('12M', fmtNumber(r12m.edm.current.listSize), { delta: '—', direction: 'neutral' }),
+        periodCell('3M', fmtNumber(r3m.edm.current.listSize), { delta: '-', direction: 'neutral' }),
+        periodCell('6M', fmtNumber(r6m.edm.current.listSize), { delta: '-', direction: 'neutral' }),
+        periodCell('12M', fmtNumber(r12m.edm.current.listSize), { delta: '-', direction: 'neutral' }),
       ],
       source: 'Klaviyo',
       lastUpdated: NOW,
@@ -508,13 +508,13 @@ function buildKlaviyoChannelMetrics(data: PeriodData): ScorecardMetric[] {
 
 // ── Channel Dashboard: Organic Social detail (not on BSC face) ──────────────
 //
-// Sample data only — Iconosquare/Meta organic insights isn't wired in yet
+// Sample data only - Iconosquare/Meta organic insights isn't wired in yet
 // (see metaOrganic.ts, which has a working Instagram client not yet
 // connected to this route). Numbers here are illustrative but internally
 // consistent with the "Social Engagements (Organic)" BSC-face card and its
 // own 3M/6M/12M progression, not independently made up.
 
-// Same wobble shape used in sampleData.ts's monthlySeries — a straight ramp
+// Same wobble shape used in sampleData.ts's monthlySeries - a straight ramp
 // draws as a flat line, so these fixed (not random) multipliers give each
 // series a believable up-and-down curve while the last month still lands
 // exactly on the real headline value. 12 entries to match the 12-month
@@ -657,7 +657,7 @@ function buildEngagementMetrics(data: PeriodData): ScorecardMetric[] {
         periodCell('12M', fmtPercent(er12), ppDelta(er12, r12m.prior.engagementRate)),
       ], 'GA4', undefined),
 
-    // Social engagements — illustrative sample only until Iconosquare/Meta
+    // Social engagements - illustrative sample only until Iconosquare/Meta
     // organic insights is wired in (see metaOrganic.ts). Kept as a plain
     // constant sample, not derived from monthlyHasData, since it's not a
     // real fallback for a live source the way the other cards' samples are.
@@ -777,7 +777,7 @@ function metric(
 /**
  * Every trendLabel in this file follows the pattern `${delta} <suffix>`,
  * where delta is a formatted number/percent starting with +, − (or exactly
- * "—" for no-prior-data). Strip the leading delta token to get the reusable
+ * "-" for no-prior-data). Strip the leading delta token to get the reusable
  * "vs X" suffix, so the frontend can rebuild the label with a different
  * period's delta when the period selector changes.
  */

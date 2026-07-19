@@ -5,12 +5,12 @@
  * and the preceding prior periods, then maps to the scorecard shape.
  *
  * Each (source, window) pair is resolved independently in this priority order:
- *   1. Database — if the daily_metrics table has rows for that window, read
+ *   1. Database - if the daily_metrics table has rows for that window, read
  *      from there (instant, no API call, matches the daily ingestion job).
- *   2. Live API — if the DB has no coverage for that window (e.g. it predates
+ *   2. Live API - if the DB has no coverage for that window (e.g. it predates
  *      the backfill, or the scheduler hasn't caught up yet) but credentials
  *      are configured, fetch live.
- *   3. Sample data — if neither the DB nor a live credential is available.
+ *   3. Sample data - if neither the DB nor a live credential is available.
  */
 import { Router, type Request, type Response, type NextFunction } from 'express'
 import { z } from 'zod'
@@ -47,10 +47,10 @@ interface ResolvedSource<T> {
  *
  * `hasData` reports which windows are genuinely-ingested vs. sample fallback
  * so sparklines can render "no data" as empty instead of implying a measured
- * zero — EXCEPT when `treatSampleAsRealData` is set, which marks the sample
+ * zero - EXCEPT when `treatSampleAsRealData` is set, which marks the sample
  * fallback itself as "has data" too. That's for demo/sharing purposes: a
  * credential that was never configured (e.g. GA4 in a demo environment)
- * should show a complete, readable sample trend rather than blank bars —
+ * should show a complete, readable sample trend rather than blank bars -
  * blank bars are only meaningful when a REAL source has gaps in its history.
  */
 async function resolveSource<T>(
@@ -73,7 +73,7 @@ async function resolveSource<T>(
           return { value: await fetchLive(w.startDate, w.endDate), hasData: true }
         } catch (err) {
           const reason = err instanceof Error ? err.message : String(err)
-          console.warn(`[scorecard] ${label} live fetch failed for ${w.startDate}–${w.endDate}, using sample data — ${reason}`)
+          console.warn(`[scorecard] ${label} live fetch failed for ${w.startDate}–${w.endDate}, using sample data - ${reason}`)
           return { value: sampleValues[i], hasData: treatSampleAsRealData }
         }
       }
@@ -95,14 +95,14 @@ scorecardRouter.get('/', async (req: Request, res: Response, next: NextFunction)
       parsed.data.month ?? `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
 
     const ranges = getRollingDateRanges(reportingMonth)
-    // Prior periods are YEAR-ON-YEAR (same window, 12 months earlier) — not
-    // sequential quarter-on-quarter — per the project brief.
+    // Prior periods are YEAR-ON-YEAR (same window, 12 months earlier) - not
+    // sequential quarter-on-quarter - per the project brief.
     const priorR3m = getPriorPeriodRange(ranges.r3m)
     const priorR6m = getPriorPeriodRange(ranges.r6m)
     const priorR12m = getPriorPeriodRange(ranges.r12m)
     const windows = [ranges.r3m, priorR3m, ranges.r6m, priorR6m, ranges.r12m, priorR12m]
 
-    // 12 distinct, non-overlapping calendar months for sparklines — enough
+    // 12 distinct, non-overlapping calendar months for sparklines - enough
     // to cover the 12M period view; the frontend slices the trailing 3, 6,
     // or 12 of these per the Period View selector. Separate from the 6
     // rolling/prior windows above, which overlap each other and would
@@ -147,7 +147,7 @@ scorecardRouter.get('/', async (req: Request, res: Response, next: NextFunction)
       monthlyWindows.map((w) => w.startDate.slice(0, 7)),
     )
 
-    // 'YYYY-MM-DD' -> 'Oct 2025', one per monthlyWindows entry — shared by every
+    // 'YYYY-MM-DD' -> 'Oct 2025', one per monthlyWindows entry - shared by every
     // card's sparkline tooltip. A fixed month-name table instead of
     // toLocaleString('en-AU', { month: 'short' }): Node's en-AU ICU data
     // doesn't abbreviate June ("June" instead of "Jun"), which read as an
@@ -160,7 +160,7 @@ scorecardRouter.get('/', async (req: Request, res: Response, next: NextFunction)
 
     // Whether EVERY rolling window for a source came from the DB or a live
     // API call (true) vs. at least one window fell back to sample data
-    // (false) — the rolling resolutions (not the monthly ones, which force
+    // (false) - the rolling resolutions (not the monthly ones, which force
     // treatSampleAsRealData for sparkline display) are the honest signal
     // here, since they don't paper over a sample fallback.
     const allSourcesLive =

@@ -16,17 +16,17 @@ function RetailerLogo({ src, name }: { src: string; name: string }) {
 interface Props {
   /** Non-BSC-face sections from the API (e.g. Meta Ads channel detail). */
   channelSections: ScorecardSection[]
-  /** 0 = 3M, 1 = 6M, 2 = 12M — which period column drives each card's headline value/trend. */
+  /** 0 = 3M, 1 = 6M, 2 = 12M - which period column drives each card's headline value/trend. */
   periodViewIndex: number
-  /** Currently selected "As At" month ('YYYY-MM') — passed to MetricCard so manual-input edits save against the right month. */
+  /** Currently selected "As At" month ('YYYY-MM') - passed to MetricCard so manual-input edits save against the right month. */
   asAtMonth: string
   /** Called after a manual value is saved, so the dashboard refetches and shows the update. */
   onManualSave: () => void
-  /** 12 month labels (oldest → newest) matching every card's sparkline — used for hover tooltips. */
+  /** 12 month labels (oldest → newest) matching every card's sparkline - used for hover tooltips. */
   sparklineMonths: string[]
 }
 
-/** Tab 3 — drill-down reference layer (retailer breakdown + per-channel detail).
+/** Tab 3 - drill-down reference layer (retailer breakdown + per-channel detail).
  *  Per brief, retailer attribution lives here, NOT on the BSC face. */
 export function ChannelDashboardTab({ channelSections, periodViewIndex, asAtMonth, onManualSave, sparklineMonths }: Props) {
   const monthLabel = new Date(`${asAtMonth}-01`).toLocaleString('en-AU', { month: 'long', year: 'numeric' })
@@ -41,7 +41,7 @@ export function ChannelDashboardTab({ channelSections, periodViewIndex, asAtMont
       </div>
 
       <div className="mb-3 border-b border-line pb-2 font-display text-[0.72rem] font-bold uppercase tracking-[0.09em] text-muted">
-        Retailer Button Click Breakdown — {monthLabel} (All Traffic)
+        Retailer Button Click Breakdown - {monthLabel} (All Traffic)
       </div>
       <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
         {retailerClicks.map((r) => (

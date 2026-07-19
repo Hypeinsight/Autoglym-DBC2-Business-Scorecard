@@ -13,7 +13,7 @@ import { AppError } from '../middleware/errorHandler.js'
 
 export const commentaryRouter = Router()
 
-/** Every field key that exists in the seeded sample commentary — kept in sync with src/data/commentary.ts (frontend). */
+/** Every field key that exists in the seeded sample commentary - kept in sync with src/data/commentary.ts (frontend). */
 const ALLOWED_FIELD_KEYS = new Set([
   'media-highlight', 'media-lowlight', 'media-opportunity',
   'engagement-highlight', 'engagement-lowlight', 'engagement-opportunity',

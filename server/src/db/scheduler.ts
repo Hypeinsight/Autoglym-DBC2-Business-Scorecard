@@ -1,6 +1,6 @@
 /**
  * Schedules the daily ingestion job inside the server process.
- * Runs once a day at 02:00 server time — after all platforms' data for
+ * Runs once a day at 02:00 server time - after all platforms' data for
  * "yesterday" has settled (Meta/Google Ads finalize same-day numbers with
  * some lag, so pulling the prior day at 2am avoids partial-day data).
  */

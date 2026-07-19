@@ -40,3 +40,6 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+# Client commercial data - keep local, do not commit
+*.xlsx

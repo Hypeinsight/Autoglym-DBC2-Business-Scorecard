@@ -128,7 +128,7 @@ async function fetchRetailerButtonClicks(
 }
 
 /**
- * Fetch per-day GA4 metrics across a date range in a single API call — used
+ * Fetch per-day GA4 metrics across a date range in a single API call - used
  * by the backfill script so history doesn't require one round-trip per day.
  *
  * @returns map of 'YYYY-MM-DD' → that day's metrics
@@ -200,7 +200,7 @@ export async function fetchGA4MetricsByDay(
   return result
 }
 
-/** GA4's 'date' dimension returns 'YYYYMMDD' — normalize to 'YYYY-MM-DD'. */
+/** GA4's 'date' dimension returns 'YYYYMMDD' - normalize to 'YYYY-MM-DD'. */
 function formatGA4Date(raw: string): string {
   if (raw.length !== 8) return raw
   return `${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)}`

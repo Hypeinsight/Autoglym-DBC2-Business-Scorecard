@@ -11,14 +11,14 @@
     text-wrap: balance;
   }
   /* Figures line up in columns throughout this dashboard (period cells,
-     sparklines, deltas) — tabular-nums keeps digit widths consistent so
+     sparklines, deltas) - tabular-nums keeps digit widths consistent so
      numbers don't visually jitter against each other. */
   .figure {
     font-variant-numeric: tabular-nums;
   }
 }
 
-/* Card load-in — a brief fade + rise so the grid feels like it's populating
+/* Card load-in - a brief fade + rise so the grid feels like it's populating
    live rather than just appearing. Delay is set per-card via --card-delay
    (staggered by grid position, see ScorecardTab/ChannelDashboardTab). */
 @keyframes card-in {
@@ -42,7 +42,75 @@
   }
 }
 
-/* Never let the load-in animation affect the printed/exported page — a card
+/* ── Living sparkline animation set ─────────────────────────────────────────
+   Together these make each trend line feel lit and in motion at rest:
+   a comet of light running along the line (spark-flow), a gentle brightening
+   of the glow (spark-breathe), an energetic double heartbeat on the newest
+   point (spark-ping x2), and a breathing core dot (spark-core). All are
+   screen-only: disabled for reduced-motion and hidden/frozen in print. */
+
+/* Comet of light travelling along the trend line. --flow-period is the path's
+   own (dash + gap) length, injected per-chart, so the loop is seamless. */
+@keyframes spark-flow {
+  from { stroke-dashoffset: var(--flow-period, 0); }
+  to   { stroke-dashoffset: 0; }
+}
+.spark-flow {
+  animation: spark-flow 2.2s linear infinite;
+}
+
+/* The blurred glow layer gently brightens and dims so the line "breathes". */
+@keyframes spark-breathe {
+  0%, 100% { opacity: 0.7; }
+  50%      { opacity: 1; }
+}
+.spark-breathe {
+  animation: spark-breathe 2.6s ease-in-out infinite;
+}
+
+/* Expanding heartbeat ring on the newest point. Bigger and more energetic than
+   a subtle tick; a second ring (spark-pulse-delay) fires half a beat later for
+   a double-thump. `r` is animated directly so it tracks the point's own
+   coordinate space under the chart's non-uniform preserveAspectRatio. */
+@keyframes spark-ping {
+  0%   { r: 3px;  opacity: 0.6; }
+  70%  { r: 13px; opacity: 0; }
+  100% { r: 13px; opacity: 0; }
+}
+.spark-pulse {
+  animation: spark-ping 1.9s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+.spark-pulse-delay {
+  animation-delay: 0.95s;
+}
+
+/* Breathing core dot at the newest point - a soft scale pulse. */
+@keyframes spark-core {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.28); }
+}
+.spark-core {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: spark-core 1.9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spark-flow { animation: none; opacity: 0 !important; }
+  .spark-breathe { animation: none; }
+  .spark-pulse { animation: none; opacity: 0; }
+  .spark-core { animation: none; }
+}
+/* Keep all of this off the exported A3 board pack (frozen mid-motion looks
+   broken on paper); the static line, glow and fill still print. */
+@media print {
+  .spark-flow,
+  .spark-pulse { display: none; }
+  .spark-breathe { animation: none; opacity: 1; }
+  .spark-core { animation: none; transform: none; }
+}
+
+/* Never let the load-in animation affect the printed/exported page - a card
    mid-fade at the moment scaleToFitA3() measures .print-page would be
    captured at partial opacity or a shifted position. */
 @media print {
@@ -55,22 +123,22 @@
 
 /* Forces the dashboard's wide-screen 4-column layout regardless of the
    browser window's actual width. Tailwind's `lg:grid-cols-4` only applies
-   above a 1024px VIEWPORT width — on a narrower window the grid silently
+   above a 1024px VIEWPORT width - on a narrower window the grid silently
    falls back to 2 columns. Applied (as a plain, non-@media-print rule) to
    <body> by scaleToFitA3() in App.tsx BEFORE measuring .print-page's size,
-   so the measurement matches what will actually print — and left on during
+   so the measurement matches what will actually print - and left on during
    printing itself so print doesn't re-flow back to 2 columns afterward. */
 .print-forced-layout .metric-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
 }
 
-/* A3 landscape print stylesheet — board pack export.
+/* A3 landscape print stylesheet - board pack export.
    Only the Scorecard face prints; Commentary + Channel tabs are hidden.
    scaleToFitA3() in App.tsx measures .print-page's natural (unscaled) size
    right before window.print() and sets these custom properties.
 
    Two-element shrink-to-fit: .print-page keeps its natural, un-clipped
-   width/height and is visually shrunk with a UNIFORM transform: scale() —
+   width/height and is visually shrunk with a UNIFORM transform: scale() -
    independent X/Y scaling was tried first but stretched/clipped card
    content, so both axes now share one ratio and nothing gets distorted.
    .print-page-outer is fixed at the full A3 printable box size and centers

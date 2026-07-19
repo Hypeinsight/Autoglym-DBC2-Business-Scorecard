@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Autoglym DBC2 Business Scorecard Dashboard — React + TailwindCSS + Chart.js",
+  "description": "Autoglym DBC2 Business Scorecard Dashboard - React + TailwindCSS + Chart.js",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

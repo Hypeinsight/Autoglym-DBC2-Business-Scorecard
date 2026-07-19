@@ -1,7 +1,7 @@
 /**
  * SQLite database for daily metric snapshots.
  *
- * One row per (date, source, metric) — populated once a day by the ingestion
+ * One row per (date, source, metric) - populated once a day by the ingestion
  * job in src/db/ingest.ts. The scorecard route sums/aggregates over this
  * table for rolling 3M/6M/12M windows instead of calling live APIs on every
  * page load.
@@ -36,7 +36,7 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_daily_metrics_lookup
     ON daily_metrics (source, metric_key, date);
 
-  -- Manually entered figures (e.g. Press Office Impressions) — one value per
+  -- Manually entered figures (e.g. Press Office Impressions) - one value per
   -- (metric, calendar month), typed in directly on the scorecard card rather
   -- than pulled from an API.
   CREATE TABLE IF NOT EXISTS manual_metrics (
@@ -49,7 +49,7 @@ db.exec(`
   );
 
   -- Editable free-text commentary (highlight/lowlight/opportunity blocks,
-  -- campaign bullets) — one row per (month, field key), edited directly on
+  -- campaign bullets) - one row per (month, field key), edited directly on
   -- the Commentary tab. Falls back to the seeded sample text in
   -- src/data/commentary.ts when no row exists for a given key/month yet.
   CREATE TABLE IF NOT EXISTS commentary_text (
@@ -85,7 +85,7 @@ export function upsertDailyMetric(
   })
 }
 
-/** Sum a metric across a date range (inclusive) — used for spend, impressions, clicks, etc. */
+/** Sum a metric across a date range (inclusive) - used for spend, impressions, clicks, etc. */
 export function sumMetric(source: MetricSource, metricKey: string, startDate: string, endDate: string): number {
   const row = db.prepare(`
     SELECT COALESCE(SUM(value), 0) AS total
@@ -95,7 +95,7 @@ export function sumMetric(source: MetricSource, metricKey: string, startDate: st
   return row.total
 }
 
-/** Average a metric across a date range (inclusive) — used for rates like CTR, bounce rate, frequency. */
+/** Average a metric across a date range (inclusive) - used for rates like CTR, bounce rate, frequency. */
 export function avgMetric(source: MetricSource, metricKey: string, startDate: string, endDate: string): number {
   const row = db.prepare(`
     SELECT COALESCE(AVG(value), 0) AS avg
@@ -105,7 +105,7 @@ export function avgMetric(source: MetricSource, metricKey: string, startDate: st
   return row.avg
 }
 
-/** Last known value of a metric on or before a given date — used for point-in-time values like list size. */
+/** Last known value of a metric on or before a given date - used for point-in-time values like list size. */
 export function latestMetric(source: MetricSource, metricKey: string, onOrBeforeDate: string): number {
   const row = db.prepare(`
     SELECT value
@@ -117,7 +117,7 @@ export function latestMetric(source: MetricSource, metricKey: string, onOrBefore
   return row?.value ?? 0
 }
 
-/** Whether we have ANY ingested data for a source — used to decide DB-backed vs live-fetch fallback. */
+/** Whether we have ANY ingested data for a source - used to decide DB-backed vs live-fetch fallback. */
 export function hasIngestedData(source: MetricSource): boolean {
   const row = db.prepare(`SELECT COUNT(*) AS count FROM daily_metrics WHERE source = ?`).get(source) as { count: number }
   return row.count > 0
@@ -126,7 +126,7 @@ export function hasIngestedData(source: MetricSource): boolean {
 /**
  * Whether we have at least one row of data for a source within a specific
  * date range. A source can have SOME history (e.g. Meta going back a year)
- * but no rows for an older window before the backfill's start date — this
+ * but no rows for an older window before the backfill's start date - this
  * catches that case so the caller can fall back to a live API call or
  * sample data for just that window, instead of silently returning zeros.
  */
@@ -138,7 +138,7 @@ export function hasIngestedDataForRange(source: MetricSource, startDate: string,
   return row.count > 0
 }
 
-/** Most recent date we have data for, across all sources — used to detect a stale/stopped ingestion job. */
+/** Most recent date we have data for, across all sources - used to detect a stale/stopped ingestion job. */
 export function latestIngestedDate(): string | null {
   const row = db.prepare(`SELECT MAX(date) AS maxDate FROM daily_metrics`).get() as { maxDate: string | null }
   return row.maxDate
@@ -162,7 +162,7 @@ export function getManualMetric(month: string, metricKey: string): number | null
   return row?.value ?? null
 }
 
-/** All entered months for a metric, oldest first — used to build sparklines from manual data. */
+/** All entered months for a metric, oldest first - used to build sparklines from manual data. */
 export function getManualMetricSeries(metricKey: string, months: string[]): Array<number | null> {
   const rows = db.prepare(`
     SELECT month, value FROM manual_metrics WHERE metric_key = ? AND month IN (${months.map(() => '?').join(',')})
@@ -181,7 +181,7 @@ export function upsertCommentaryText(month: string, fieldKey: string, value: str
   `).run({ month, fieldKey, value, updatedAt: new Date().toISOString() })
 }
 
-/** All edited commentary text fields for a given month — keyed by field_key, for the route to overlay on top of the seeded sample text. */
+/** All edited commentary text fields for a given month - keyed by field_key, for the route to overlay on top of the seeded sample text. */
 export function getCommentaryTextForMonth(month: string): Record<string, string> {
   const rows = db.prepare(`
     SELECT field_key, value FROM commentary_text WHERE month = ?

@@ -1,9 +1,9 @@
 /**
- * Meta organic social insights client — Instagram Business Account via the
+ * Meta organic social insights client - Instagram Business Account via the
  * Graph API's IG Insights endpoint (NOT the Ads Insights API used in
  * meta.ts, which only covers paid campaigns).
  *
- * Replaces the Iconosquare integration for Instagram — organic reach/
+ * Replaces the Iconosquare integration for Instagram - organic reach/
  * engagement is available for free through Meta's own API.
  *
  * Facebook Page-level insights (page_impressions etc.) are NOT included
@@ -11,14 +11,14 @@
  * System User token returns "This method must be called with a Page
  * Access Token"), and most of the old page_* metrics were deprecated in
  * 2024–2025 waves anyway. Revisit if Page-level organic data becomes a
- * priority — it needs a token-exchange step, not just a permission grant.
+ * priority - it needs a token-exchange step, not just a permission grant.
  *
- * IG metric names below are current as of the Nov 2025 deprecation wave —
+ * IG metric names below are current as of the Nov 2025 deprecation wave -
  * Meta previously used `impressions`, which is now retired in favour of
  * `views`. If this starts erroring with "must be one of the following
  * values", the API error message itself lists the current valid set.
  *
- * Requires a token with: instagram_basic, instagram_manage_insights — plus
+ * Requires a token with: instagram_basic, instagram_manage_insights - plus
  * the Instagram account added as an asset to the System User in Business
  * Settings.
  *
@@ -72,7 +72,7 @@ interface TotalValueInsight {
  * Fetch Instagram Business Account organic insights for a date range.
  *
  * Uses metric_type=total_value, which returns ONE aggregated number per
- * metric for the whole range — not a daily series — despite period=day
+ * metric for the whole range - not a daily series - despite period=day
  * being required as a parameter. This matches the account-level totals
  * shape the rest of the app expects (see fetchMetaAccountMetrics in meta.ts).
  */
@@ -111,7 +111,7 @@ async function fetchFollowerCount(): Promise<number> {
 }
 
 /**
- * Public entry point — Instagram organic metrics for a date range. Mirrors
+ * Public entry point - Instagram organic metrics for a date range. Mirrors
  * the scorecard's "organic social impressions, engagements" scope that was
  * previously going to come from Iconosquare.
  */

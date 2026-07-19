@@ -1,7 +1,7 @@
 /**
  * POST /api/ingest/run?date=YYYY-MM-DD
  *
- * Manually triggers the daily ingestion job — used for testing and for
+ * Manually triggers the daily ingestion job - used for testing and for
  * backfilling historical days one at a time. Defaults to yesterday if no
  * date is given, matching the scheduled job's behaviour.
  */

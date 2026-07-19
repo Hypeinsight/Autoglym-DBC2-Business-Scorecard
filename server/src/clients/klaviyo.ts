@@ -147,7 +147,7 @@ async function getListStats(listId: string): Promise<{ size: number }> {
 }
 
 /**
- * Primary export — fetch aggregate Klaviyo EDM metrics for a date range.
+ * Primary export - fetch aggregate Klaviyo EDM metrics for a date range.
  *
  * Klaviyo's reporting API works at the campaign level, so we:
  * 1. List all campaigns sent in the range.
@@ -177,7 +177,7 @@ export async function fetchKlaviyoMetrics(
       totalUnsubscribes += stats.unsubscribes
     } catch {
       // Skip campaigns with missing stats rather than failing the whole response
-      console.warn(`[klaviyo] Could not fetch stats for campaign ${campaign.id} — skipping`)
+      console.warn(`[klaviyo] Could not fetch stats for campaign ${campaign.id} - skipping`)
     }
   }
 
@@ -197,9 +197,9 @@ export async function fetchKlaviyoMetrics(
 }
 
 /**
- * Fetch per-day Klaviyo metrics across a date range — used by the backfill
+ * Fetch per-day Klaviyo metrics across a date range - used by the backfill
  * script. Unlike GA4/Ads/Meta (continuous daily spend/traffic), Klaviyo
- * activity is naturally sparse — campaigns send on discrete days — so this
+ * activity is naturally sparse - campaigns send on discrete days - so this
  * lists all campaigns in the range once, then buckets each campaign's stats
  * under its actual send date rather than issuing one API call per day.
  *
@@ -232,7 +232,7 @@ export async function fetchKlaviyoMetricsByDay(
       day.totalUnsubscribes += stats.unsubscribes
       byDay[date] = day
     } catch {
-      console.warn(`[klaviyo] Could not fetch stats for campaign ${campaign.id} — skipping`)
+      console.warn(`[klaviyo] Could not fetch stats for campaign ${campaign.id} - skipping`)
     }
   }
 

@@ -1,6 +1,6 @@
 /**
  * Reconstructs each source's *MetricsRaw shape from the daily_metrics table
- * for a given date window — sums additive metrics (spend, impressions,
+ * for a given date window - sums additive metrics (spend, impressions,
  * clicks), averages rate metrics (CTR, bounce rate, frequency), and takes
  * the latest point-in-time value for snapshot metrics (list size).
  *
@@ -86,10 +86,10 @@ export function readKlaviyoFromDb(range: Range): KlaviyoMetricsRaw {
 /**
  * Returns the last `count` full calendar months (oldest first) ending at
  * `reportingMonth` ('YYYY-MM') INCLUSIVE. Used to build true monthly
- * sparklines — 9 distinct, non-overlapping months — instead of sampling
+ * sparklines - 9 distinct, non-overlapping months - instead of sampling
  * the 4 overlapping 3M/6M/12M rolling-window totals.
  *
- * Pure integer month arithmetic — NOT `Date`/`toISOString()` — since
+ * Pure integer month arithmetic - NOT `Date`/`toISOString()` - since
  * `new Date(y, m, d)` constructs in local time while `toISOString()`
  * converts to UTC, silently shifting the date (sometimes by a whole month
  * near a month boundary) in timezones behind UTC.

@@ -26,7 +26,7 @@ export function fmtDuration(seconds: number): string {
 
 /** Compute a % delta string and its direction. */
 export function pctDelta(current: number, prior: number): { delta: string; direction: TrendDirection } {
-  if (prior === 0) return { delta: '—', direction: 'neutral' }
+  if (prior === 0) return { delta: '-', direction: 'neutral' }
   const pct = ((current - prior) / Math.abs(prior)) * 100
   const sign = pct >= 0 ? '+' : ''
   return {
@@ -62,18 +62,18 @@ export function ppDelta(
 }
 
 /**
- * Build a sparkline with one point per input value (typically 12 months —
+ * Build a sparkline with one point per input value (typically 12 months -
  * the frontend slices the trailing 3/6/12 of these per the Period View
  * selector, so this always returns the FULL series, not a fixed 9-bar
  * sample). Each point carries the raw value, a pre-formatted display string
  * (via `format`, defaulting to fmtNumber), and a `height` normalized
- * against the FULL series' own max — a fallback for any consumer that
+ * against the FULL series' own max - a fallback for any consumer that
  * doesn't do its own per-slice normalization. The frontend Sparkline
  * component recomputes height itself from `raw`, scoped to whichever
  * 3/6/12-month slice is actually visible, so a short window doesn't render
  * artificially flat just because it's quiet relative to the full year.
  *
- * `height`/`raw` are null for a month with no ingested data at all — kept
+ * `height`/`raw` are null for a month with no ingested data at all - kept
  * distinct from a genuine zero so the frontend renders that month's bar as
  * empty space instead of implying "measured and confirmed zero."
  */
@@ -85,7 +85,7 @@ export function toSparkline(values: number[], hasData?: boolean[], format: (n: n
 
   return values.map((v, i) => {
     if (hasData && hasData[i] === false) {
-      return { height: null, raw: null, displayValue: '—' }
+      return { height: null, raw: null, displayValue: '-' }
     }
     const height = max === 0 ? 4 : Math.max(4, Math.round((v / max) * 100))
     return { height, raw: v, displayValue: format(v) }

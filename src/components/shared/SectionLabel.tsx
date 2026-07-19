@@ -1,6 +1,6 @@
 import type { SectionColor } from '@/types'
 
-// A small accent dot rather than a solid-color badge — reads as one
+// A small accent dot rather than a solid-color badge - reads as one
 // considered system across sections instead of stock Tailwind hues
 // (the old blue/green/orange badges didn't relate to the brand palette).
 const dotColor: Record<SectionColor, string> = {

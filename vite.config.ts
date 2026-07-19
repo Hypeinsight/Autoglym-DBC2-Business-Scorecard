@@ -15,7 +15,7 @@ export default defineConfig({
     open: true,
     proxy: {
       // Proxy /api requests to the Node.js backend in development.
-      // No CORS headers needed — the browser sees only one origin.
+      // No CORS headers needed - the browser sees only one origin.
       '/api': {
         target: 'http://localhost:3001',
         changeOrigin: true,

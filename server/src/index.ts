@@ -24,7 +24,7 @@ app.use('/api/ingest', ingestRouter)
 app.use('/api/manual-metrics', manualMetricsRouter)
 app.use('/api/commentary', commentaryRouter)
 
-// Central error handler — must be last
+// Central error handler - must be last
 app.use(errorHandler)
 
 app.listen(PORT, () => {

@@ -1,8 +1,8 @@
 /**
- * Daily ingestion job — pulls yesterday's numbers from each configured API
+ * Daily ingestion job - pulls yesterday's numbers from each configured API
  * and writes them into the daily_metrics table.
  *
- * Runs once per day (see src/db/scheduler.ts). Each source is independent —
+ * Runs once per day (see src/db/scheduler.ts). Each source is independent -
  * if one API fails or isn't configured, the others still ingest normally.
  */
 import { fetchGA4Metrics, type GA4MetricsRaw } from '../clients/ga4.js'
@@ -109,7 +109,7 @@ async function ingestKlaviyo(date: string): Promise<void> {
 
 /**
  * Ingest all sources for a given date (defaults to yesterday).
- * Each source is isolated — a failure in one does not block the others.
+ * Each source is isolated - a failure in one does not block the others.
  */
 export async function runDailyIngestion(date: string = yesterday()): Promise<void> {
   console.log(`[ingest] Starting daily ingestion for ${date}`)
@@ -126,7 +126,7 @@ export async function runDailyIngestion(date: string = yesterday()): Promise<voi
       await job()
     } catch (err) {
       const reason = err instanceof Error ? err.message : String(err)
-      console.error(`[ingest] ${label} failed for ${date} — ${reason}`)
+      console.error(`[ingest] ${label} failed for ${date} - ${reason}`)
     }
   }
 
